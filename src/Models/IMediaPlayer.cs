@@ -58,7 +58,7 @@ namespace NhlTvFetcher.Models {
         /// Formats a parameter value for use in command line execution.
         /// </summary>
         /// <param name="value">The string value of any given parameter name.</param>
-        /// <returns>The value, enclosed in single quotes if contains spaces; otherwise blank string.</returns>
+        /// <returns>The parameter value (enclosed in single quotes if contains spaces); otherwise blank string.</returns>
         private string FormatParameterValue(string value) {
             return (!string.IsNullOrWhiteSpace(value)
                     ? $"={(value.Contains(' ')
@@ -101,11 +101,11 @@ namespace NhlTvFetcher.Models {
         public string TiledScreenParameterName { get; set; } = "--geometry";
 
         public List<string> TiledScreenParameterValues { get; set; } = [
-            "50%+0+0", // top-left (50%)
-            "50%+100%+0", // top-right (50%)
-            "50%+0+100%", // bottom-left (50%)
-            "50%+100%+100%", // bottom-right (50%)
-            "25%+50%+50%" // center (25%)
+            "50%+0+0",          // top-left (50%)
+            "50%+100%+0",       // top-right (50%)
+            "50%+0+100%",       // bottom-left (50%)
+            "50%+100%+100%",    // bottom-right (50%)
+            "25%+50%+50%"       // center (25%)
         ];
     }
 
@@ -124,11 +124,11 @@ namespace NhlTvFetcher.Models {
         public string TiledScreenParameterName { get; set; } = "--align";
 
         public List<string> TiledScreenParameterValues { get; set; } = [
-            "5", // top-left
-            "6", // top-right
-            "9", // bottom-left
-            "10", // bottom-right
-            "0" // center
+            "5",    // top-left
+            "6",    // top-right
+            "9",    // bottom-left
+            "10",   // bottom-right
+            "0"     // center
         ];
     }
 }

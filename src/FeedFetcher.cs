@@ -178,6 +178,7 @@ namespace NhlTvFetcher {
                 foreach (var content in game.content) {
                     if (content.clientContentMetadata.Length != 0) {
                         switch (content.status.id) {
+                            case 2: // future
                             case 3: // replay
                             case 4: // live
                                 var nationalBroadcaster = "";
@@ -229,7 +230,6 @@ namespace NhlTvFetcher {
                                                           broadcasterType.Contains(b.Name));
                                     }
 
-                                    //broadcasterType.Contains(b.Name)
                                     if (broadcaster != null) {
                                         broadcasterString = broadcaster.Name;
                                     }
@@ -247,16 +247,6 @@ namespace NhlTvFetcher {
                                                 ? broadcasterType
                                                 : broadcaster.Name;
                                         }
-
-                                        //if (broadcasterType.Equals("HOME") ||
-                                        //    broadcasterType.Equals("AWAY")) {
-                                        //    broadcasterString = broadcaster.Name;
-                                        //}
-                                        //else {
-                                        //    broadcasterString = (broadcaster.Name == "NHLN")
-                                        //        ? broadcasterType
-                                        //        : broadcaster.Name;
-                                        //}
                                     }
                                 }
 
@@ -281,7 +271,6 @@ namespace NhlTvFetcher {
 
                                 break;
 
-                            case 2: // future
                             default:
                                 break;
                         }
@@ -339,7 +328,7 @@ namespace NhlTvFetcher {
                     foreach (var date in model.GameWeek) {
                         curDate = DateTime.Parse(date.Date);
 
-                        if (DateTime.Compare(curDate, endDate.Date) < 0) {
+                        if (DateTime.Compare(curDate, endDate.Date) <= 0) {
                             foreach (var game in date.Games) {
                                 if (game.TvBroadcasts != null) {
                                     foreach (var broadcastItem in game.TvBroadcasts) {
