@@ -85,10 +85,15 @@ namespace NhlTvFetcher {
                 "\n\te.g. --tiled-player-parameters=\"50%+0+0 50%+100%+0 50%+0+100% 50%+100%+100% 25%+50%+50%\"")]
         public IEnumerable<string> TiledPlayerParameters { get; set; }
 
-        [Option('x', "stream-position", Required = false,
+        [Option("ask-stream-position", Required = false, Default = false,
             HelpText =
-                "(Default: ask) If playing the stream ('-l'), will start at this position: " +
-                "\n\t1\t Start\n\t2\t 2nd Period (approx)\n\t3\t 3rd Period (approx)\n\t4\t Live\n\txx\t Custom time (in minutes)")]
+                "If playing the stream ('-l'), will ask for stream position ('-x') for any stream being played.")]
+        public bool AskPlayPosition { get; set; }
+
+        [Option('x', "stream-position", Required = false, Default = 0,
+            HelpText =
+                "If playing the stream ('-l'), will attempt to start the stream at this position: " +
+                "\n\t0\t Live\n\t1\t 1st Period\n\t2\t 2nd Period (approx)\n\t3\t 3rd Period (approx)\n\txx\t Custom time (in minutes)")]
         public int PlayPosition { get; set; }
 
         [Option('y', "multiple-feeds", Required = false, Default = false,
