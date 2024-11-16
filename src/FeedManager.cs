@@ -224,32 +224,41 @@ namespace NhlTvFetcher {
             var timeDiff = (int)DateTime.Now.Subtract(feedStartTime).TotalMinutes;
 
             int userChoice = _options.PlayPosition;
-            if (userChoice <= 0 || userChoice > 4) {
+            if (_options.AskPlayPosition) {
                 int temp = 0;
                 do {
                     var ask = timeDiff switch {
                         > (int)StartTimeOffset.ThirdPeriod =>
-                            "1: Start\n" + "2: 2nd Period\n" + "3: 3rd Period\n" +
-                            (streamIsReplay ? "" : "4: Live\n"),
+                            (streamIsReplay ? "" : "0: Live\n") +
+                            "1: Start\n" +
+                            "2: 2nd Period\n" +
+                            "3: 3rd Period\n",
 
                         > (int)StartTimeOffset.SecondPeriod =>
-                            "1: Start\n" + "2: 2nd Period\n" + "4: Live\n",
+                            "0: Live\n" +
+                            "1: Start\n" +
+                            "2: 2nd Period\n",
 
                         > (int)StartTimeOffset.FirstPeriod =>
-                            "1: Start\n" + "4: Live\n",
+                            "0: Live\n" +
+                            "1: Start\n",
 
                         _ => throw new ArgumentOutOfRangeException(
                             $"parameter time is before feed time: {nameof(timeDiff)}")
                     };
+                    ask += "xx: Custom time (in minutes)\n";
 
                     _messenger.Write("\n" + ask + "\nChoose stream starting point: ");
-                    int.TryParse(Console.ReadLine(), out temp);
-                } while (temp is < 1 or > 4);
+                    ;
+                } while (!int.TryParse(Console.ReadLine(), out temp) || temp < 0);
 
                 userChoice = temp;
             }
 
             switch (userChoice) {
+                case 0:
+                    break;
+
                 case 1:
                     offsetParams.Add("--hls-live-restart", "");
                     break;
@@ -268,8 +277,12 @@ namespace NhlTvFetcher {
                             : $"{timeDiff - (int)StartTimeOffset.ThirdPeriod}m");
                     break;
 
-                case 4:
-                default: break;
+                default:
+                    offsetParams.Add("--hls-start-offset",
+                        streamIsReplay
+                            ? $"{userChoice}m"
+                            : $"{timeDiff - userChoice}m");
+                    break;
             }
 
             return offsetParams;
